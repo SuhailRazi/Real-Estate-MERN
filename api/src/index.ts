@@ -2,6 +2,7 @@ import express, { Request, Response, Application } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/auth.route";
+import userRoutes from "./routes/user.route";
 import testRoutes from "./routes/test.route";
 import cookieParser from "cookie-parser";
 
@@ -18,6 +19,7 @@ app.get("/api", (_req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/test", testRoutes);
 
 app.listen(port, () => {
