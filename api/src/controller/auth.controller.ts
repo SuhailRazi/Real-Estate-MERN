@@ -52,6 +52,7 @@ export const login = async (req: Request, res: Response) => {
     const token = jwt.sign(
       {
         id: user.id,
+        isAdmin: true, //Assuming all users are admin
       },
       process.env.JWT_SECRET_KEY ?? "secretKey",
       {
