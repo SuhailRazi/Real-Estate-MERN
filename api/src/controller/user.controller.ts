@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import prisma from "../lib/prisma";
 import bcrypt from "bcrypt";
+import { ObjectId } from "mongodb";
+
+const isValidObjectId = (id: string) => {
+  return ObjectId.isValid(id) && new ObjectId(id).toString() === id;
+};
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -14,6 +19,23 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+export const getCurrentUser = async (req: Request, res: Response) => {
+  const id = res.locals.userId;
+  try {
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid user ID format" });
+    }
+
+    const currentUser = await prisma.user.findUnique({
+      where: { id },
+    });
+    res.status(200).json(currentUser);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Failed to get currentUser user" });
+  }
+};
+
 export const getUser = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
@@ -23,15 +45,7 @@ export const getUser = async (req: Request, res: Response) => {
     res.status(200).json(user);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Failed to get users" });
-  }
-};
-
-export const getCurrentUser = async (req: Request, res: Response) => {
-  try {
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Failed to get users" });
+    res.status(500).json({ message: "Failed to get the requested user" });
   }
 };
 
