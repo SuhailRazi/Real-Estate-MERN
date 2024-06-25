@@ -30,13 +30,18 @@ export const createPost = async (req: Request, res: Response) => {
   try {
     const newPost = await prisma.post.create({
       data: {
-        ...body,
+        ...body.postData,
         userId: tokenUserId,
+        postDetail: {
+          create: body.postDetail,
+        },
       },
     });
 
     res.status(200).json(newPost);
   } catch (err) {
+    console.log(err);
+
     res.status(500).json({ message: "Failed to create post" });
   }
 };
@@ -52,13 +57,14 @@ export const updatePost = async (req: Request, res: Response) => {
 export const deletePost = async (req: Request, res: Response) => {
   const id = req.params.id;
   const tokenUserId = res.locals.userId;
+  console.log(tokenUserId, id);
 
   try {
     const post = await prisma.post.findUnique({
       where: { id },
     });
 
-    if (post?.userId == tokenUserId) {
+    if (post?.userId !== tokenUserId) {
       return res.status(403).json({ message: "Not authorized" });
     }
 
