@@ -1,9 +1,23 @@
+import { Post, Property, Type } from "@prisma/client";
 import prisma from "../lib/prisma";
 import { Response, Request } from "express";
 
 export const getAllPost = async (req: Request, res: Response) => {
+  const query = req.query;
+
   try {
-    const posts = await prisma.post.findMany();
+    const posts = await prisma.post.findMany({
+      where: {
+        city: query.city as string,
+        type: query.type as Type,
+        property: query.property as Property,
+        bedroom: (query.bedroom as string) || undefined,
+        price: {
+          gte: parseInt(query.minPrice as string) || 0,
+          lte: parseInt(query.maxPrice as string) || 100000000,
+        },
+      },
+    });
     res.status(200).json(posts);
   } catch (err) {
     res.status(500).json({ message: "Failed to get posts" });
