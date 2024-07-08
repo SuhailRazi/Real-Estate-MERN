@@ -4,6 +4,7 @@ import {
   getCurrentUser,
   getUser,
   getUsers,
+  savePosts,
   updateUser,
 } from "../controller/user.controller";
 import { verifyToken } from "../middleware/verifyToken";
@@ -15,5 +16,6 @@ router.get("/currentUser", verifyToken, getCurrentUser);
 router.get("/:id", verifyToken, getUser);
 router.put("/:id", verifyToken, updateUser);
 router.delete("/:id", verifyToken, deleteUser);
+router.post("/save", verifyToken, savePosts);
 
 export default router;
