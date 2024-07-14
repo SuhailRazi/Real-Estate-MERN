@@ -4,6 +4,6 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/message", verifyToken, addMessage);
+router.post("/:id", verifyToken, addMessage);
 
 export default router;

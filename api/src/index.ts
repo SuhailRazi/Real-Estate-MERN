@@ -27,7 +27,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/chats", chatRoute);
-app.use("/api/message", messageRoute);
+app.use("/api/messages", messageRoute);
 
 app.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);
