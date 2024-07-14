@@ -22,7 +22,7 @@ model User {
   created    DateTime    @default(now())
   Post       Post[]
   savedPosts SavedPost[]
-  chats      Chat[]
+  chats      Chat[]      @relation(fields: [chatIDs], references: [id])
   chatIDs    String[]    @db.ObjectId
 }
 
@@ -85,11 +85,11 @@ model SavedPost {
 
 model Chat {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  User        User?     @relation(fields: [userIDs], references: [id])
-  userIDs     String?   @db.ObjectId
+  Users       User[]    @relation(fields: [userIDs], references: [id])
+  userIDs     String[]  @db.ObjectId
   createdAt   DateTime  @default(now())
   seenBy      String[]  @db.ObjectId
-  Message     Message[]
+  messages    Message[]
   lastMessage String?
 }
 
